@@ -35,5 +35,16 @@ namespace StudentClinic_WebApi.Controllers
         {
             return Ok(await _userService.AddUser(newUser));
         }
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> UpdateUser(UpdateUserDto updatedUser)
+        {
+            var response = await _userService.UpdateUser(updatedUser);
+            if(response.Data is null) 
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }

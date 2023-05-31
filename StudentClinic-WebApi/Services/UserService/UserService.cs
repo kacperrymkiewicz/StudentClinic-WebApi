@@ -46,5 +46,29 @@ namespace StudentClinic_WebApi.Services.UserService
             serviceResponse.Data = _mapper.Map<GetUserDto>(user);
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser)
+        {
+            var serviceResponse = new ServiceResponse<GetUserDto>();
+
+            try {
+                var user = users.FirstOrDefault(u => u.Id == updatedUser.Id);
+                if(user is null)
+                    throw new Exception($"Nie znaleziono użytkownika z ID: '{updatedUser.Id}'");
+
+                user.FirstName = updatedUser.FirstName;
+                user.LastName = updatedUser.LastName;
+                user.Login = updatedUser.Login;
+                user.Password = updatedUser.Password;
+                user.AccountType = updatedUser.AccountType;
+
+                serviceResponse.Data = _mapper.Map<GetUserDto>(user);
+            } catch (Exception ex) {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
     }
 }

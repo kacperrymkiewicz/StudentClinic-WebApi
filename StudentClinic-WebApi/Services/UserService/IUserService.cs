@@ -11,6 +11,7 @@ namespace StudentClinic_WebApi.Services.UserService
     {
         Task<ServiceResponse<List<GetUserDto>>> GetAllUsers();
         Task<ServiceResponse<GetUserDto>> GetUserById(int id);
-        Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto user);
+        Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUser);
+        Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser);
     }
 }
