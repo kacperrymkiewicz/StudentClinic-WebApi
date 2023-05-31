@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudentClinic_WebApi.Services.UserService;
 using StudentClinic_WebApi.Models;
+using StudentClinic_WebApi.Dtos.User;
 
 namespace StudentClinic_WebApi.Controllers
 {
@@ -17,20 +18,20 @@ namespace StudentClinic_WebApi.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Get()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<ServiceResponse<User>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingle(int id)
         {
             return Ok(await _userService.GetUserById(id));
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(User newUser)
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> AddUser(AddUserDto newUser)
         {
             return Ok(await _userService.AddUser(newUser));
         }
