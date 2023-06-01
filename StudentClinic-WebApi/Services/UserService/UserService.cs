@@ -10,14 +10,14 @@ namespace StudentClinic_WebApi.Services.UserService
 {
     public class UserService : IUserService
     {
-        private static List<User> users = new List<User> 
+        private static List<User> users = new List<User>
         {
             new User(),
             new User { Id = 1, FirstName = "Bartosz" }
         };
         private readonly IMapper _mapper;
 
-        public UserService(IMapper mapper) 
+        public UserService(IMapper mapper)
         {
             _mapper = mapper;
         }
@@ -51,9 +51,10 @@ namespace StudentClinic_WebApi.Services.UserService
         {
             var serviceResponse = new ServiceResponse<GetUserDto>();
 
-            try {
+            try
+            {
                 var user = users.FirstOrDefault(u => u.Id == updatedUser.Id);
-                if(user is null)
+                if (user is null)
                     throw new Exception($"Nie znaleziono użytkownika z ID: '{updatedUser.Id}'");
 
                 user.FirstName = updatedUser.FirstName;
@@ -63,7 +64,32 @@ namespace StudentClinic_WebApi.Services.UserService
                 user.AccountType = updatedUser.AccountType;
 
                 serviceResponse.Data = _mapper.Map<GetUserDto>(user);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+
+            try
+            {
+                var user = users.FirstOrDefault(u => u.Id == id);
+                if (user is null)
+                    throw new Exception($"Nie znaleziono użytkownika z ID: '{id}'");
+
+                users.Remove(user);
+
+                serviceResponse.Data = users.Select(u => _mapper.Map<GetUserDto>(u)).ToList();
+            }
+            catch (Exception ex)
+            {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
             }

@@ -46,5 +46,17 @@ namespace StudentClinic_WebApi.Controllers
             }
             return Ok(response);
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> DeleteUser(int id)
+        {
+            var response = await _userService.DeleteUser(id);
+            if(response.Data is null) 
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }
