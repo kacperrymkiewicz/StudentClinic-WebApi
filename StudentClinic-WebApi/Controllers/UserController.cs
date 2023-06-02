@@ -2,6 +2,7 @@
 using StudentClinic_WebApi.Services.UserService;
 using StudentClinic_WebApi.Models;
 using StudentClinic_WebApi.Dtos.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StudentClinic_WebApi.Controllers
 {
@@ -15,7 +16,7 @@ namespace StudentClinic_WebApi.Controllers
         {
             _userService = userService;
         }
-
+        
         [HttpGet]
         [Route("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Get()
@@ -23,6 +24,7 @@ namespace StudentClinic_WebApi.Controllers
             return Ok(await _userService.GetAllUsers());
         }
 
+        [Authorize]
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingle(int id)

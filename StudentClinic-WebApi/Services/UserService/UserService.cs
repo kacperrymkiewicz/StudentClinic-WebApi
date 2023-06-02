@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using StudentClinic_WebApi.Data;
 using StudentClinic_WebApi.Dtos.User;
 using StudentClinic_WebApi.Models;
 
@@ -10,31 +12,29 @@ namespace StudentClinic_WebApi.Services.UserService
 {
     public class UserService : IUserService
     {
-        private static List<User> users = new List<User>
-        {
-            new User(),
-            new User { Id = 1, FirstName = "Bartosz" }
-        };
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public UserService(IMapper mapper)
+        public UserService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUser)
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
             var user = _mapper.Map<User>(newUser);
-            user.Id = users.Max(u => u.Id) + 1;
-            users.Add(user);
-            serviceResponse.Data = users.Select(u => _mapper.Map<GetUserDto>(u)).ToList();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.Users.Select(u => _mapper.Map<GetUserDto>(u)).ToListAsync();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            var users = await _context.Users.ToListAsync();
             serviceResponse.Data = users.Select(u => _mapper.Map<GetUserDto>(u)).ToList();
             return serviceResponse;
         }
@@ -42,7 +42,7 @@ namespace StudentClinic_WebApi.Services.UserService
         public async Task<ServiceResponse<GetUserDto>> GetUserById(int id)
         {
             var serviceResponse = new ServiceResponse<GetUserDto>();
-            var user = users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             serviceResponse.Data = _mapper.Map<GetUserDto>(user);
             return serviceResponse;
         }
@@ -53,16 +53,16 @@ namespace StudentClinic_WebApi.Services.UserService
 
             try
             {
-                var user = users.FirstOrDefault(u => u.Id == updatedUser.Id);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == updatedUser.Id);
                 if (user is null)
                     throw new Exception($"Nie znaleziono użytkownika z ID: '{updatedUser.Id}'");
 
                 user.FirstName = updatedUser.FirstName;
                 user.LastName = updatedUser.LastName;
-                user.Login = updatedUser.Login;
-                user.Password = updatedUser.Password;
+                user.EmailAddress = updatedUser.EmailAddress;
                 user.AccountType = updatedUser.AccountType;
 
+                await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetUserDto>(user);
             }
             catch (Exception ex)
@@ -80,13 +80,14 @@ namespace StudentClinic_WebApi.Services.UserService
 
             try
             {
-                var user = users.FirstOrDefault(u => u.Id == id);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
                 if (user is null)
                     throw new Exception($"Nie znaleziono użytkownika z ID: '{id}'");
 
-                users.Remove(user);
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
 
-                serviceResponse.Data = users.Select(u => _mapper.Map<GetUserDto>(u)).ToList();
+                serviceResponse.Data = await _context.Users.Select(u => _mapper.Map<GetUserDto>(u)).ToListAsync();
             }
             catch (Exception ex)
             {
