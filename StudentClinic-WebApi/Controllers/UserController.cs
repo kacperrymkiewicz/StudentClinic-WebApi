@@ -18,7 +18,6 @@ namespace StudentClinic_WebApi.Controllers
         }
         
         [HttpGet]
-        [Route("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Get()
         {
             return Ok(await _userService.GetAllUsers());
@@ -51,6 +50,7 @@ namespace StudentClinic_WebApi.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Doctor")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> DeleteUser(int id)
         {
             var response = await _userService.DeleteUser(id);

@@ -97,7 +97,8 @@ namespace StudentClinic_WebApi.Data
             var claims = new List<Claim> 
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.EmailAddress.ToString())
+                new Claim(ClaimTypes.Email, user.EmailAddress.ToString()),
+                new Claim(ClaimTypes.Role, user.AccountType.ToString())
             };
 
             var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
