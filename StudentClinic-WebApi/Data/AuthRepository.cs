@@ -60,6 +60,9 @@ namespace StudentClinic_WebApi.Data
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+            
+            _context.Patients.Add(new Patient { UserId = user.Id });
+            await _context.SaveChangesAsync();
             response.Data = user.Id;
 
             return response;

@@ -20,6 +20,7 @@ namespace StudentClinic_WebApi.Data
 
         public DbSet<User> Users => Set<User>();
         public DbSet<Patient> Patients => Set<Patient>();
-
+        public DbSet<Doctor> Doctors => Set<Doctor>();
+        public DbSet<Visit> Visits => Set<Visit>();
     }
 }
