@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using StudentClinic_WebApi.Data;
 using StudentClinic_WebApi.Services.PatientService;
 using StudentClinic_WebApi.Services.UserService;
+using StudentClinic_WebApi.Services.VisitService;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<DataContext>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => 

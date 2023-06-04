@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentClinic_WebApi.Data;
 
@@ -10,9 +11,11 @@ using StudentClinic_WebApi.Data;
 namespace StudentClinic_WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230604160817_VisitMigration")]
+    partial class VisitMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,38 +149,6 @@ namespace StudentClinic_WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("VisitSlots");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            EndTime = new TimeOnly(8, 30, 0),
-                            StartTime = new TimeOnly(8, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EndTime = new TimeOnly(9, 0, 0),
-                            StartTime = new TimeOnly(8, 30, 0)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            EndTime = new TimeOnly(9, 30, 0),
-                            StartTime = new TimeOnly(9, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            EndTime = new TimeOnly(10, 0, 0),
-                            StartTime = new TimeOnly(9, 30, 0)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            EndTime = new TimeOnly(10, 30, 0),
-                            StartTime = new TimeOnly(10, 0, 0)
-                        });
                 });
 
             modelBuilder.Entity("StudentClinic_WebApi.Models.Doctor", b =>
