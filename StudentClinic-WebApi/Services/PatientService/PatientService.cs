@@ -13,55 +13,55 @@ using StudentClinic_WebApi.Services.UserService;
 
 namespace StudentClinic_WebApi.Services.PatientService
 {
-  public class PatientService : IPatientService
-  {
-    private readonly IMapper _mapper;
-    private readonly DataContext _context;
-    private readonly IUserService _userService;
-
-    public PatientService(IMapper mapper, DataContext context, IUserService userService)
+    public class PatientService : IPatientService
     {
-        _userService = userService;
-        _mapper = mapper;
-        _context = context;
-    }
+        private readonly IMapper _mapper;
+        private readonly DataContext _context;
+        private readonly IUserService _userService;
 
-    public async Task<ServiceResponse<List<GetPatientDto>>> GetAllPatients()
-    {
-        var serviceResponse = new ServiceResponse<List<GetPatientDto>>();
-        var patients = await _context.Patients.Include(p => p.User).ToListAsync();
-        serviceResponse.Data = patients.Select(p => _mapper.Map<GetPatientDto>(p)).ToList();
-        return serviceResponse;
-    }
+        public PatientService(IMapper mapper, DataContext context, IUserService userService)
+        {
+            _userService = userService;
+            _mapper = mapper;
+            _context = context;
+        }
 
-    public async Task<ServiceResponse<List<GetVisitDto>>> GetAllVisits(int id)
-    {
-            var serviceResponse = new ServiceResponse<List<GetVisitDto>>();
-
-            try
-            {
-                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
-                if (patient is null)
-                    throw new Exception($"Nie znaleziono pacjenta z ID: '{id}'");
-
-                var visits = await _context.Visits.
-                    Include(v => v.Doctor).
-                    Include(v => v.Doctor!.User).
-                    Include(v => v.Slot).
-                    Where(v => v.PatientId == patient.Id).
-                    ToListAsync();
-                serviceResponse.Data = visits.Select(v => _mapper.Map<GetVisitDto>(v)).ToList();
-            }
-            catch(Exception ex)
-            {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
-            }
-            
+        public async Task<ServiceResponse<List<GetPatientDto>>> GetAllPatients()
+        {
+            var serviceResponse = new ServiceResponse<List<GetPatientDto>>();
+            var patients = await _context.Patients.Include(p => p.User).ToListAsync();
+            serviceResponse.Data = patients.Select(p => _mapper.Map<GetPatientDto>(p)).ToList();
             return serviceResponse;
-    }
+        }
 
-    public async Task<ServiceResponse<GetPatientDto>> GetPatientById(int id)
+        public async Task<ServiceResponse<List<GetVisitDto>>> GetAllVisits(int id)
+        {
+                var serviceResponse = new ServiceResponse<List<GetVisitDto>>();
+
+                try
+                {
+                    var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
+                    if (patient is null)
+                        throw new Exception($"Nie znaleziono pacjenta z ID: '{id}'");
+
+                    var visits = await _context.Visits.
+                        Include(v => v.Doctor).
+                        Include(v => v.Doctor!.User).
+                        Include(v => v.Slot).
+                        Where(v => v.PatientId == patient.Id).
+                        ToListAsync();
+                    serviceResponse.Data = visits.Select(v => _mapper.Map<GetVisitDto>(v)).ToList();
+                }
+                catch(Exception ex)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = ex.Message;
+                }
+                
+                return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetPatientDto>> GetPatientById(int id)
         {
             var serviceResponse = new ServiceResponse<GetPatientDto>();
 
@@ -110,5 +110,5 @@ namespace StudentClinic_WebApi.Services.PatientService
 
             return serviceResponse;
         }
-  }
+    }
 }
