@@ -8,7 +8,7 @@ namespace StudentClinic_WebApi.Data
 {
     public interface IAuthRepository
     {
-        Task<ServiceResponse<int>> Register(User user, string password);
+        Task<ServiceResponse<int>> Register(User user, Patient patient, string password);
         Task<ServiceResponse<string>> Login(string email, string password);
         Task<bool> UserExists(string email);
     }
