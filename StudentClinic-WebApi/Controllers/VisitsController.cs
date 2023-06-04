@@ -11,11 +11,11 @@ namespace StudentClinic_WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class VisitController : ControllerBase
+    public class VisitsController : ControllerBase
     {
         private readonly IVisitService _visitService;
 
-        public VisitController(IVisitService visitService) 
+        public VisitsController(IVisitService visitService) 
         {
             _visitService = visitService;
         }
@@ -24,6 +24,19 @@ namespace StudentClinic_WebApi.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetVisitDto>>>> Get()
         {
             return Ok(await _visitService.GetAllVisits());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ServiceResponse<List<GetVisitDto>>>> AddVisit(AddVisitDto newVisit)
+        {
+            return Ok(await _visitService.AddVisit(newVisit));
+        }
+
+        [HttpPost]
+        [Route("Slots")]
+        public async Task<ActionResult<ServiceResponse<List<GetVisitDto>>>> GetSlots(GetVisitAvailableSlotsDto visitSlots)
+        {
+            return Ok(await _visitService.GetAvailableSlots(visitSlots));
         }
     }
 }
