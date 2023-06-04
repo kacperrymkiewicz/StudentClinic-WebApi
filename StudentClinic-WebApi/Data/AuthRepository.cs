@@ -43,7 +43,7 @@ namespace StudentClinic_WebApi.Data
             return response;
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<int>> Register(User user, Patient patient, string password)
         {
             var response = new ServiceResponse<int>();
             if(await UserExists(user.EmailAddress))
@@ -61,7 +61,8 @@ namespace StudentClinic_WebApi.Data
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             
-            _context.Patients.Add(new Patient { UserId = user.Id });
+            patient.UserId = user.Id;
+            _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
             response.Data = user.Id;
 

@@ -25,7 +25,9 @@ namespace StudentClinic_WebApi.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepository.Register(
-                new User { FirstName = request.FirstName, LastName = request.LastName, EmailAddress = request.EmailAddress }, request.Password
+                new User { FirstName = request.FirstName, LastName = request.LastName, EmailAddress = request.EmailAddress }, 
+                new Patient { Pesel = request.Pesel, PhoneNumber = request.PhoneNumber}, 
+                request.Password
             );
 
             if (!response.Success)
