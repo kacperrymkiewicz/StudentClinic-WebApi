@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentClinic_WebApi.Data;
 
@@ -10,9 +11,11 @@ using StudentClinic_WebApi.Data;
 namespace StudentClinic_WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230604220644_PatientVisitMigration")]
+    partial class PatientVisitMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,19 +51,10 @@ namespace StudentClinic_WebApi.Migrations
                     b.Property<string>("Allergies")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("City")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Pesel")
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StreetAddress")
                         .HasColumnType("longtext");
 
                     b.Property<int>("UserId")

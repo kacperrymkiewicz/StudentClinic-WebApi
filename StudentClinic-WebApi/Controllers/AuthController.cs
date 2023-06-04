@@ -26,7 +26,7 @@ namespace StudentClinic_WebApi.Controllers
         {
             var response = await _authRepository.Register(
                 new User { FirstName = request.FirstName, LastName = request.LastName, EmailAddress = request.EmailAddress }, 
-                new Patient { Pesel = request.Pesel, PhoneNumber = request.PhoneNumber}, 
+                new Patient { Pesel = request.Pesel, PhoneNumber = request.PhoneNumber, City = request.City, PostalCode = request.PostalCode, StreetAddress = request.StreetAddress}, 
                 request.Password
             );
 

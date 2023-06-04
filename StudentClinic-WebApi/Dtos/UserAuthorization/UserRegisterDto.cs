@@ -13,5 +13,8 @@ namespace StudentClinic_WebApi.Dtos.User
         public string Password { get; set; } = string.Empty;
         public string Pesel { get; set; }
         public string PhoneNumber { get; set; }
+        public string City { get; set; }
+        public string PostalCode { get; set; }
+        public string StreetAddress { get; set; }
     }
 }

@@ -34,9 +34,21 @@ namespace StudentClinic_WebApi.Controllers
 
         [HttpPost]
         [Route("Slots")]
-        public async Task<ActionResult<ServiceResponse<List<GetVisitDto>>>> GetSlots(GetVisitAvailableSlotsDto visitSlots)
+        public async Task<ActionResult<ServiceResponse<List<VisitSlot>>>> GetSlots(GetVisitAvailableSlotsDto visitSlots)
         {
             return Ok(await _visitService.GetAvailableSlots(visitSlots));
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetVisitDto>>> GetSingle(int id)
+        {
+            var response = await _visitService.GetVisitById(id);
+            if(response.Data is null) 
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }

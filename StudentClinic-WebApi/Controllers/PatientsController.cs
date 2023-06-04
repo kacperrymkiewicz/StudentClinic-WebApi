@@ -49,5 +49,17 @@ namespace StudentClinic_WebApi.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet]
+        [Route("{id}/Visits")]
+        public async Task<ActionResult<ServiceResponse<GetPatientDto>>> GetVisits(int id)
+        {
+            var response = await _patientService.GetAllVisits(id);
+            if(response.Data is null) 
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }

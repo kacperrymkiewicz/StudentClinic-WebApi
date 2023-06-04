@@ -50,7 +50,7 @@ namespace StudentClinic_WebApi.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Receptionist")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> DeleteUser(int id)
         {
             var response = await _userService.DeleteUser(id);

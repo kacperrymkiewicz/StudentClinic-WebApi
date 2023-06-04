@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentClinic_WebApi.Data;
 using StudentClinic_WebApi.Dtos.Patient;
 using StudentClinic_WebApi.Dtos.User;
+using StudentClinic_WebApi.Dtos.Visit;
 using StudentClinic_WebApi.Models;
 using StudentClinic_WebApi.Services.UserService;
 
@@ -33,7 +34,34 @@ namespace StudentClinic_WebApi.Services.PatientService
         return serviceResponse;
     }
 
-        public async Task<ServiceResponse<GetPatientDto>> GetPatientById(int id)
+    public async Task<ServiceResponse<List<GetVisitDto>>> GetAllVisits(int id)
+    {
+            var serviceResponse = new ServiceResponse<List<GetVisitDto>>();
+
+            try
+            {
+                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
+                if (patient is null)
+                    throw new Exception($"Nie znaleziono pacjenta z ID: '{id}'");
+
+                var visits = await _context.Visits.
+                    Include(v => v.Doctor).
+                    Include(v => v.Doctor!.User).
+                    Include(v => v.Slot).
+                    Where(v => v.PatientId == patient.Id).
+                    ToListAsync();
+                serviceResponse.Data = visits.Select(v => _mapper.Map<GetVisitDto>(v)).ToList();
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            
+            return serviceResponse;
+    }
+
+    public async Task<ServiceResponse<GetPatientDto>> GetPatientById(int id)
         {
             var serviceResponse = new ServiceResponse<GetPatientDto>();
 
@@ -41,7 +69,7 @@ namespace StudentClinic_WebApi.Services.PatientService
             {
                 var patient = await _context.Patients.Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
                 if (patient is null)
-                    throw new Exception($"Nie znaleziono użytkownika z ID: '{id}'");
+                    throw new Exception($"Nie znaleziono pacjenta z ID: '{id}'");
 
                 serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);
             }
@@ -62,11 +90,14 @@ namespace StudentClinic_WebApi.Services.PatientService
             {
                 var patient = await _context.Patients.Include(p => p.User).FirstOrDefaultAsync(p => p.Id == updatedPatient.Id);
                 if (patient is null)
-                    throw new Exception($"Nie znaleziono użytkownika z ID: '{updatedPatient.Id}'");
+                    throw new Exception($"Nie znaleziono pacjenta z ID: '{updatedPatient.Id}'");
 
                 patient.Pesel = updatedPatient.Pesel;
                 patient.PhoneNumber = updatedPatient.PhoneNumber;
                 patient.Allergies = updatedPatient.Allergies;
+                patient.User!.FirstName = updatedPatient.User!.FirstName;
+                patient.User!.LastName = updatedPatient.User!.LastName;
+                patient.User!.EmailAddress = updatedPatient.User!.EmailAddress;
 
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);

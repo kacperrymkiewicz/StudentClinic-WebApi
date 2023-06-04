@@ -20,6 +20,7 @@ namespace StudentClinic_WebApi
             CreateMap<Patient, GetPatientDto>();
             CreateMap<Visit, GetVisitDto>();
             CreateMap<Doctor, GetDoctorDto>();
+            CreateMap<AddVisitDto, Visit>();
         }
     }
 }
