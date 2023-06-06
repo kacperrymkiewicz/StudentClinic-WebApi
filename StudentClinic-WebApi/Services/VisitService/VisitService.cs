@@ -89,18 +89,74 @@ namespace StudentClinic_WebApi.Services.VisitService
         throw new NotImplementedException();
         }
         
-        public async Task<ServiceResponse<List<VisitSlot>>> GetAvailableSlots(GetVisitAvailableSlotsDto visitSlots)
+        public async Task<ServiceResponse<List<GetVisitSlotStatusDto>>> GetAvailableSlots(GetVisitAvailableSlotsDto visitSlots)
         {
-            var serviceResponse = new ServiceResponse<List<VisitSlot>>();
+            var serviceResponse = new ServiceResponse<List<GetVisitSlotStatusDto>>();
             var visits = await _context.Visits.Where(v => v.Date == visitSlots.Date && v.DoctorId == visitSlots.DoctorId).ToListAsync();
-            var slots = await _context.VisitSlots.ToListAsync();
+            var slots = await _context.VisitSlots.Select(s => _mapper.Map<GetVisitSlotStatusDto>(s)).ToListAsync();
             
             foreach(var visit in visits)
             {
-                slots.RemoveAll(s => s.Id == visit.SlotId);
+                slots.Find(s => s.Id == visit.SlotId)!.Status = false;
+            }
+
+            if(visitSlots.Date == DateOnly.FromDateTime(DateTime.Now))
+            {
+                slots.FindAll(s => s.StartTime < TimeOnly.FromDateTime(DateTime.Now)).ForEach(s => s.Status = false);
+            }
+
+            if(visitSlots.Date < DateOnly.FromDateTime(DateTime.Now))
+            {
+                slots.ForEach(s => s.Status = false);
             }
 
             serviceResponse.Data = slots;
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetVisitDto>> CancelVisit(int id)
+        {
+            var serviceResponse = new ServiceResponse<GetVisitDto>();
+
+            try
+            {
+                var visit = await _context.Visits.FirstOrDefaultAsync(v => v.Id == id);
+                if(visit is null)
+                    throw new Exception($"Nie znaleziono wizyty z ID: '{id}'");
+                
+                visit.Status = VisitStatus.Canceled;
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = _mapper.Map<GetVisitDto>(visit);
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetVisitDto>> ConfirmVisit(int id)
+        {
+            var serviceResponse = new ServiceResponse<GetVisitDto>();
+
+            try
+            {
+                var visit = await _context.Visits.FirstOrDefaultAsync(v => v.Id == id);
+                if(visit is null)
+                    throw new Exception($"Nie znaleziono wizyty z ID: '{id}'");
+                
+                visit.Status = VisitStatus.Confirmed;
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = _mapper.Map<GetVisitDto>(visit);
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
             return serviceResponse;
         }
     }

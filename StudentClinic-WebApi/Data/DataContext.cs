@@ -36,7 +36,7 @@ namespace StudentClinic_WebApi.Data
                 new VisitSlot { Id = 13, StartTime = new TimeOnly(15, 00), EndTime = new TimeOnly(15, 30)},
                 new VisitSlot { Id = 14, StartTime = new TimeOnly(15, 30), EndTime = new TimeOnly(16, 00)},
                 new VisitSlot { Id = 15, StartTime = new TimeOnly(16, 00), EndTime = new TimeOnly(16, 30)},
-                new VisitSlot { Id = 15, StartTime = new TimeOnly(16, 30), EndTime = new TimeOnly(17, 00)}
+                new VisitSlot { Id = 16, StartTime = new TimeOnly(16, 30), EndTime = new TimeOnly(17, 00)}
             );
 
         }

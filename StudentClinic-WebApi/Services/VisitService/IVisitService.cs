@@ -13,6 +13,8 @@ namespace StudentClinic_WebApi.Services.VisitService
         Task<ServiceResponse<GetVisitDto>> GetVisitById(int id);
         Task<ServiceResponse<List<GetVisitDto>>> AddVisit(AddVisitDto newVisit);
         Task<ServiceResponse<GetVisitDto>> UpdateVisit(int id, UpdateVisitDto updatedVisit);
-        Task<ServiceResponse<List<VisitSlot>>> GetAvailableSlots(GetVisitAvailableSlotsDto visitSlots);
+        Task<ServiceResponse<List<GetVisitSlotStatusDto>>> GetAvailableSlots(GetVisitAvailableSlotsDto visitSlots);
+        Task<ServiceResponse<GetVisitDto>> CancelVisit(int id);
+        Task<ServiceResponse<GetVisitDto>> ConfirmVisit(int id);
     }
 }

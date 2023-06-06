@@ -24,7 +24,7 @@ namespace StudentClinic_WebApi.Data
         public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailAddress.ToLower().Equals(email.ToLower()));
+            var user = await _context.Users.Include(u => u.Patient).Include(u => u.Doctor).FirstOrDefaultAsync(u => u.EmailAddress.ToLower().Equals(email.ToLower()));
             if(user is null)
             {
                 response.Success = false;
@@ -102,7 +102,8 @@ namespace StudentClinic_WebApi.Data
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.EmailAddress.ToString()),
-                new Claim(ClaimTypes.Role, user.AccountType.ToString())
+                new Claim(ClaimTypes.Role, user.AccountType.ToString()),
+                new Claim(type: "roleId", value: GetRoleId(user).ToString())
             };
 
             var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
@@ -123,6 +124,16 @@ namespace StudentClinic_WebApi.Data
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        private int GetRoleId(User user)
+        {
+            if(user.AccountType == AccountType.Patient && user.Patient != null)
+                return user.Patient!.Id;
+            else if(user.AccountType == AccountType.Doctor && user.Doctor != null)
+                return user.Doctor!.Id;
+            else
+                return 0;
         }
     }
 }

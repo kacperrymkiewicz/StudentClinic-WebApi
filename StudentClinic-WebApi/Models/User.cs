@@ -10,5 +10,6 @@
         public byte[] PasswordSalt { get; set; }
         public AccountType AccountType { get; set; } = AccountType.Patient;
         public Patient? Patient { get; set; }
+        public Doctor? Doctor { get; set; }
     }
 }

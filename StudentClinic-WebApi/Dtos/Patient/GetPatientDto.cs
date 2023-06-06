@@ -16,6 +16,7 @@ namespace StudentClinic_WebApi.Dtos.Patient
         public string? City { get; set; }
         public string? PostalCode { get; set; }
         public string? StreetAddress { get; set; }
+        public DateOnly? BirthDate { get; set; }
         public GetUserDto? User { get; set; }
     }
 }

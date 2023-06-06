@@ -11,8 +11,8 @@ using StudentClinic_WebApi.Data;
 namespace StudentClinic_WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230604223635_PatientUpdateMigration")]
-    partial class PatientUpdateMigration
+    [Migration("20230606183250_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,8 @@ namespace StudentClinic_WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Doctors");
                 });
@@ -50,6 +51,9 @@ namespace StudentClinic_WebApi.Migrations
 
                     b.Property<string>("Allergies")
                         .HasColumnType("longtext");
+
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("City")
                         .HasColumnType("longtext");
@@ -163,94 +167,106 @@ namespace StudentClinic_WebApi.Migrations
                         new
                         {
                             Id = 1,
-                            EndTime = new TimeOnly(8, 30, 0),
-                            StartTime = new TimeOnly(8, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EndTime = new TimeOnly(9, 0, 0),
-                            StartTime = new TimeOnly(8, 30, 0)
-                        },
-                        new
-                        {
-                            Id = 3,
                             EndTime = new TimeOnly(9, 30, 0),
                             StartTime = new TimeOnly(9, 0, 0)
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 2,
                             EndTime = new TimeOnly(10, 0, 0),
                             StartTime = new TimeOnly(9, 30, 0)
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 3,
                             EndTime = new TimeOnly(10, 30, 0),
                             StartTime = new TimeOnly(10, 0, 0)
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 4,
                             EndTime = new TimeOnly(11, 0, 0),
                             StartTime = new TimeOnly(10, 30, 0)
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 5,
                             EndTime = new TimeOnly(11, 30, 0),
                             StartTime = new TimeOnly(11, 0, 0)
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 6,
                             EndTime = new TimeOnly(12, 0, 0),
                             StartTime = new TimeOnly(11, 30, 0)
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 7,
                             EndTime = new TimeOnly(12, 30, 0),
                             StartTime = new TimeOnly(12, 0, 0)
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 8,
                             EndTime = new TimeOnly(13, 0, 0),
                             StartTime = new TimeOnly(12, 30, 0)
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 9,
                             EndTime = new TimeOnly(13, 30, 0),
                             StartTime = new TimeOnly(13, 0, 0)
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 10,
                             EndTime = new TimeOnly(14, 0, 0),
                             StartTime = new TimeOnly(13, 30, 0)
                         },
                         new
                         {
-                            Id = 13,
+                            Id = 11,
                             EndTime = new TimeOnly(14, 30, 0),
                             StartTime = new TimeOnly(14, 0, 0)
                         },
                         new
                         {
-                            Id = 14,
+                            Id = 12,
                             EndTime = new TimeOnly(15, 0, 0),
                             StartTime = new TimeOnly(14, 30, 0)
+                        },
+                        new
+                        {
+                            Id = 13,
+                            EndTime = new TimeOnly(15, 30, 0),
+                            StartTime = new TimeOnly(15, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 14,
+                            EndTime = new TimeOnly(16, 0, 0),
+                            StartTime = new TimeOnly(15, 30, 0)
+                        },
+                        new
+                        {
+                            Id = 15,
+                            EndTime = new TimeOnly(16, 30, 0),
+                            StartTime = new TimeOnly(16, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 16,
+                            EndTime = new TimeOnly(17, 0, 0),
+                            StartTime = new TimeOnly(16, 30, 0)
                         });
                 });
 
             modelBuilder.Entity("StudentClinic_WebApi.Models.Doctor", b =>
                 {
                     b.HasOne("StudentClinic_WebApi.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("Doctor")
+                        .HasForeignKey("StudentClinic_WebApi.Models.Doctor", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -302,6 +318,8 @@ namespace StudentClinic_WebApi.Migrations
 
             modelBuilder.Entity("StudentClinic_WebApi.Models.User", b =>
                 {
+                    b.Navigation("Doctor");
+
                     b.Navigation("Patient");
                 });
 #pragma warning restore 612, 618

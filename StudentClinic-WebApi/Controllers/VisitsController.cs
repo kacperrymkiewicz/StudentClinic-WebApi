@@ -34,7 +34,7 @@ namespace StudentClinic_WebApi.Controllers
 
         [HttpPost]
         [Route("Slots")]
-        public async Task<ActionResult<ServiceResponse<List<VisitSlot>>>> GetSlots(GetVisitAvailableSlotsDto visitSlots)
+        public async Task<ActionResult<ServiceResponse<List<GetVisitSlotStatusDto>>>> GetSlots(GetVisitAvailableSlotsDto visitSlots)
         {
             return Ok(await _visitService.GetAvailableSlots(visitSlots));
         }
@@ -44,6 +44,30 @@ namespace StudentClinic_WebApi.Controllers
         public async Task<ActionResult<ServiceResponse<GetVisitDto>>> GetSingle(int id)
         {
             var response = await _visitService.GetVisitById(id);
+            if(response.Data is null) 
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{id}/Cancel")]
+        public async Task<ActionResult<ServiceResponse<GetVisitDto>>> CancelVisit(int id)
+        {
+            var response = await _visitService.CancelVisit(id);
+            if(response.Data is null) 
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{id}/Confirm")]
+        public async Task<ActionResult<ServiceResponse<GetVisitDto>>> ConfirmVisit(int id)
+        {
+            var response = await _visitService.ConfirmVisit(id);
             if(response.Data is null) 
             {
                 return NotFound(response);
