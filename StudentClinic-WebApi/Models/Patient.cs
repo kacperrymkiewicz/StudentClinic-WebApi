@@ -12,6 +12,7 @@
         public DateOnly? BirthDate { get; set; }
         public User? User { get; set; }
         public int UserId { get; set; }
-        public List<Visit>? Visits { get; set; }
+        public ICollection<Visit>? Visits { get; set; }
+        public ICollection<Prescription>? Prescriptions { get; set; }
     }
 }

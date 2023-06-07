@@ -18,5 +18,6 @@ namespace StudentClinic_WebApi.Dtos.Patient
         public string? StreetAddress { get; set; }
         public DateOnly? BirthDate { get; set; }
         public GetUserDto? User { get; set; }
+        public ICollection<Prescription>? Prescriptions { get; set; }
     }
 }
