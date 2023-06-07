@@ -38,7 +38,6 @@ namespace StudentClinic_WebApi.Data
                 new VisitSlot { Id = 15, StartTime = new TimeOnly(16, 00), EndTime = new TimeOnly(16, 30)},
                 new VisitSlot { Id = 16, StartTime = new TimeOnly(16, 30), EndTime = new TimeOnly(17, 00)}
             );
-
         }
 
         public DbSet<User> Users => Set<User>();
@@ -46,5 +45,6 @@ namespace StudentClinic_WebApi.Data
         public DbSet<Doctor> Doctors => Set<Doctor>();
         public DbSet<Visit> Visits => Set<Visit>();
         public DbSet<VisitSlot> VisitSlots => Set<VisitSlot>();
+        public DbSet<Prescription> Prescriptions => Set<Prescription>();
     }
 }
