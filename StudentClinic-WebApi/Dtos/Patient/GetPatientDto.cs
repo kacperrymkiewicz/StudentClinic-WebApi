@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using StudentClinic_WebApi.Dtos.User;
+using StudentClinic_WebApi.Dtos.Prescription;
 using StudentClinic_WebApi.Models;
 
 namespace StudentClinic_WebApi.Dtos.Patient
@@ -18,6 +19,6 @@ namespace StudentClinic_WebApi.Dtos.Patient
         public string? StreetAddress { get; set; }
         public DateOnly? BirthDate { get; set; }
         public GetUserDto? User { get; set; }
-        public ICollection<Prescription>? Prescriptions { get; set; }
+        public List<GetPrescriptionListDto>? Prescriptions { get; set; }
     }
 }

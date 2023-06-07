@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using StudentClinic_WebApi.Dtos.Doctor;
 using StudentClinic_WebApi.Dtos.Patient;
+using StudentClinic_WebApi.Dtos.Prescription;
 using StudentClinic_WebApi.Dtos.User;
 using StudentClinic_WebApi.Dtos.Visit;
 using StudentClinic_WebApi.Models;
@@ -22,6 +23,7 @@ namespace StudentClinic_WebApi
             CreateMap<Doctor, GetDoctorDto>();
             CreateMap<AddVisitDto, Visit>();
             CreateMap<VisitSlot, GetVisitSlotStatusDto>();
+            CreateMap<Prescription, GetPrescriptionListDto>();
         }
     }
 }

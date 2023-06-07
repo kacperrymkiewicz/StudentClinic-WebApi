@@ -67,7 +67,12 @@ namespace StudentClinic_WebApi.Services.PatientService
 
             try
             {
-                var patient = await _context.Patients.Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
+                var patient = await _context.Patients.
+                    Include(p => p.User).
+                    Include(p => p.Prescriptions!).
+                    ThenInclude(p => p.Doctor).
+                    ThenInclude(d => d.User).
+                    FirstOrDefaultAsync(p => p.Id == id);
                 if (patient is null)
                     throw new Exception($"Nie znaleziono pacjenta z ID: '{id}'");
 
