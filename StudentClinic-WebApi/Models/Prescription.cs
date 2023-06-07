@@ -16,6 +16,6 @@ namespace StudentClinic_WebApi.Models
         public string Dosage { get; set; }
         public string PrescriptionCode { get; set; }
         public string Recommendations { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
     }
 }

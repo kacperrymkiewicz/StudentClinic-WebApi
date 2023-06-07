@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StudentClinic_WebApi.Dtos.Doctor;
+using StudentClinic_WebApi.Dtos.Prescription;
 using StudentClinic_WebApi.Models;
 using StudentClinic_WebApi.Services.DoctorService;
 
@@ -50,6 +51,13 @@ namespace StudentClinic_WebApi.Controllers
         public async Task<ActionResult<ServiceResponse<List<string>>>> GetAllSpecializations()
         {
             return Ok(await _doctorService.GetAllSpecializations());
+        }
+
+        [HttpPost]
+        [Route("Prescriptions")]
+        public async Task<ActionResult<ServiceResponse<GetPrescriptionDto>>> AddPrescription(AddPrescriptionDto newPrescription)
+        {
+            return Ok(await _doctorService.AddPrescription(newPrescription));
         }
     }
 }

@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using StudentClinic_WebApi.Data;
 using StudentClinic_WebApi.Dtos.Doctor;
+using StudentClinic_WebApi.Dtos.Prescription;
 using StudentClinic_WebApi.Models;
 
 namespace StudentClinic_WebApi.Services.DoctorService
@@ -67,5 +68,15 @@ namespace StudentClinic_WebApi.Services.DoctorService
 
             return serviceResponse;
         }
-    }
+
+        public async Task<ServiceResponse<GetPrescriptionDto>> AddPrescription(AddPrescriptionDto newPrescription)
+        {
+            var serviceResponse = new ServiceResponse<GetPrescriptionDto>();
+            var prescription = _mapper.Map<Prescription>(newPrescription);
+            _context.Prescriptions.Add(prescription);
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = _mapper.Map<GetPrescriptionDto>(prescription);
+            return serviceResponse;
+        }
+  }
 }

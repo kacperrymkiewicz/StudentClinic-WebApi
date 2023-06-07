@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using StudentClinic_WebApi.Dtos.Doctor;
+using StudentClinic_WebApi.Dtos.Prescription;
 using StudentClinic_WebApi.Models;
 
 namespace StudentClinic_WebApi.Services.DoctorService
@@ -13,5 +14,6 @@ namespace StudentClinic_WebApi.Services.DoctorService
         Task<ServiceResponse<List<GetDoctorDto>>> GetAllDoctors();
         Task<ServiceResponse<List<GetDoctorDto>>> GetAllDoctorsBySpecialization(string specialization);
         Task<ServiceResponse<List<string>>> GetAllSpecializations();
+        Task<ServiceResponse<GetPrescriptionDto>> AddPrescription(AddPrescriptionDto newPrescription);
     }
 }
