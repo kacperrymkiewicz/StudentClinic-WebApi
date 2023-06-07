@@ -9,8 +9,8 @@ namespace StudentClinic_WebApi.Dtos.User
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string EmailAddress { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string EmailAddress { get; set; }
+        public string Password { get; set; }
         public string Pesel { get; set; }
         public string PhoneNumber { get; set; }
         public string City { get; set; }
