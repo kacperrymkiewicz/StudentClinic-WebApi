@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StudentClinic_WebApi.Data;
 using StudentClinic_WebApi.Dtos.User;
+using StudentClinic_WebApi.Dtos.UserAuthorization;
 using StudentClinic_WebApi.Models;
 
 namespace StudentClinic_WebApi.Controllers
@@ -42,6 +43,19 @@ namespace StudentClinic_WebApi.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto request)
         {
             var response = await _authRepository.Login(request.EmailAddress, request.Password);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<ActionResult<ServiceResponse<bool>>> ChangePassword(UserChangePasswordDto request)
+        {
+            var response = await _authRepository.ChangePassword(request);
 
             if (!response.Success)
             {

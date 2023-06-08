@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using StudentClinic_WebApi.Dtos.UserAuthorization;
 using StudentClinic_WebApi.Models;
 
 namespace StudentClinic_WebApi.Data
@@ -69,6 +70,39 @@ namespace StudentClinic_WebApi.Data
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> ChangePassword(UserChangePasswordDto userRequest)
+        {
+            var response = new ServiceResponse<bool>();
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userRequest.Id);
+
+            if(user is null)
+            {
+                response.Success = false;
+                response.Message = "Podany użytkownik nie istnieje";
+            }
+            else
+            {
+                if(VerifyPasswordHash(userRequest.currentPassword, user.PasswordHash, user.PasswordSalt))
+                {
+                    CreatePasswordHash(userRequest.newPassword, out byte[] passwordHash, out byte[] passwordSalt);
+                    user.PasswordHash = passwordHash;
+                    user.PasswordSalt = passwordSalt;
+                    await _context.SaveChangesAsync();
+
+                    response.Data = true;
+                    response.Message = "Hasło zostało zmienione pomyślnie";
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Aktualne hasło jest nieprawidłowe";
+                }
+            }
+
+            return response;
+        }
+
         public async Task<bool> UserExists(string email)
         {
             if(await _context.Users.AnyAsync(u => u.EmailAddress.ToLower() == email.ToLower()))
@@ -103,6 +137,8 @@ namespace StudentClinic_WebApi.Data
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.EmailAddress.ToString()),
                 new Claim(ClaimTypes.Role, user.AccountType.ToString()),
+                new Claim(type: "firstName", value: user.FirstName.ToString()),
+                new Claim(type: "lastName", value: user.LastName.ToString()),
                 new Claim(type: "roleId", value: GetRoleId(user).ToString())
             };
 
