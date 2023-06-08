@@ -53,6 +53,12 @@ namespace StudentClinic_WebApi.Services.VisitService
                 .Include(v => v.Patient!.User)
                 .Include(v => v.Doctor!.User)
                 .ToListAsync();
+            visits.ForEach(v => {
+                if((v.Date.ToDateTime(v.Slot!.StartTime) < DateTime.Now) && v.Status != VisitStatus.Canceled) {
+                    v.Status = VisitStatus.Finished;
+                }
+            });
+
             serviceResponse.Data = visits.Select(v => _mapper.Map<GetVisitDto>(v)).ToList();
             return serviceResponse;
         }
@@ -120,10 +126,13 @@ namespace StudentClinic_WebApi.Services.VisitService
 
             try
             {
-                var visit = await _context.Visits.FirstOrDefaultAsync(v => v.Id == id);
+                var visit = await _context.Visits.Include(v => v.Slot).FirstOrDefaultAsync(v => v.Id == id);
                 if(visit is null)
                     throw new Exception($"Nie znaleziono wizyty z ID: '{id}'");
-                
+
+                if((visit.Date.ToDateTime(visit.Slot!.StartTime) - DateTime.Now) <= TimeSpan.FromHours(24))
+                    throw new Exception($"Nie można odwołać wizyty, ponieważ pozostało mniej niż 24 godziny lub już się odbyła");
+
                 visit.Status = VisitStatus.Canceled;
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetVisitDto>(visit);

@@ -50,6 +50,11 @@ namespace StudentClinic_WebApi.Services.PatientService
                         Include(v => v.Slot).
                         Where(v => v.PatientId == patient.Id).
                         ToListAsync();
+                    visits.ForEach(v => {
+                        if((v.Date.ToDateTime(v.Slot!.StartTime) < DateTime.Now) && v.Status != VisitStatus.Canceled) {
+                            v.Status = VisitStatus.Finished;
+                        }
+                    });
                     serviceResponse.Data = visits.Select(v => _mapper.Map<GetVisitDto>(v)).ToList();
                 }
                 catch(Exception ex)
