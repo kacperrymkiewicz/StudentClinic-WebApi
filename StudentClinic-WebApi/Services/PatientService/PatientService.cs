@@ -105,6 +105,10 @@ namespace StudentClinic_WebApi.Services.PatientService
                 patient.Pesel = updatedPatient.Pesel;
                 patient.PhoneNumber = updatedPatient.PhoneNumber;
                 patient.Allergies = updatedPatient.Allergies;
+                patient.MedicationsTaken = updatedPatient.MedicationsTaken;
+                patient.City = updatedPatient.City;
+                patient.PostalCode = updatedPatient.PostalCode;
+                patient.StreetAddress = updatedPatient.StreetAddress;
                 patient.User!.FirstName = updatedPatient.User!.FirstName;
                 patient.User!.LastName = updatedPatient.User!.LastName;
                 patient.User!.EmailAddress = updatedPatient.User!.EmailAddress;
