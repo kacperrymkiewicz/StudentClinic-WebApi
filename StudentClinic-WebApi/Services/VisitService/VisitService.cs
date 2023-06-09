@@ -98,7 +98,7 @@ namespace StudentClinic_WebApi.Services.VisitService
         public async Task<ServiceResponse<List<GetVisitSlotStatusDto>>> GetAvailableSlots(GetVisitAvailableSlotsDto visitSlots)
         {
             var serviceResponse = new ServiceResponse<List<GetVisitSlotStatusDto>>();
-            var visits = await _context.Visits.Where(v => v.Date == visitSlots.Date && v.DoctorId == visitSlots.DoctorId).ToListAsync();
+            var visits = await _context.Visits.Where(v => v.Date == visitSlots.Date && v.DoctorId == visitSlots.DoctorId && v.Status != VisitStatus.Canceled).ToListAsync();
             var slots = await _context.VisitSlots.Select(s => _mapper.Map<GetVisitSlotStatusDto>(s)).ToListAsync();
             
             foreach(var visit in visits)
